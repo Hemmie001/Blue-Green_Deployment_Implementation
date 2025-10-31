@@ -1,0 +1,6 @@
+# Configuration files containing secrets or local paths
+.env
+
+# Docker files
+*.class
+*.log

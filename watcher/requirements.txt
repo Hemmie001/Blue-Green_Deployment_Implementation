@@ -1,0 +1,5 @@
+slack-sdk
+python-dotenv
+# The 'tailer' package is often needed for reliable log tailing, 
+# but for simplicity and standard libraries, we can rely on a simple file loop. 
+# We'll use os, time, and collections for a more standard approach.

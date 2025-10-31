@@ -8,11 +8,15 @@ http {
     include       mime.types;
     default_type  application/octet-stream;
 
+    #log format definition
+    include /etc/nginx/conf.d/custom_log_format.conf;
+
     # Tight timeouts for quick failure detection (required)
     # Failure detection must be fast for seamless auto-failover.
     proxy_connect_timeout       1s;
     proxy_send_timeout          2s;
     proxy_read_timeout          2s;
+
 
     # --- Upstream Definitions: The Core Blue/Green Failover ---
     upstream upstream_pool {
@@ -47,9 +51,9 @@ http {
             proxy_next_upstream error timeout http_500 http_502 http_503 http_504;
             
             # Allows Nginx one retry attempt (total of 2 tries: primary then backup)
-            proxy_next_upstream_tries 2; 
+            proxy_next_upstream_tries 2;
+	    proxy_next_upstream error timeout http_500 http_502 http_503 http_504;
 
-            # Headers: Do not strip, forward all app headers to clients (required)
             # This ensures X-App-Pool and X-Release-Id are passed.
             proxy_set_header Host $host;
             proxy_pass_request_headers on;
