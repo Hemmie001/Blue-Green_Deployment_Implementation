@@ -1,17 +1,15 @@
-# Use a minimal Python image
+# Python image
 FROM python:3.10-slim
 
 # Set working directory
 WORKDIR /app
 
 # Copy requirements and install dependencies
-# CORRECTED LINE: Removed 'watcher/' prefix
-COPY requirements.txt .
+COPY watcher/requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
 # Copy the watcher script
-# CORRECTED LINE: Removed 'watcher/' prefix
-COPY watcher.py .
+COPY watcher/watcher.py .
 
 # Command to run the watcher script
 CMD ["python", "watcher.py"]
