@@ -9,6 +9,9 @@ from slack_sdk.webhook import WebhookClient
 # Recall that: In a production setup, python-dotenv is used to read variables from 
 # the local .env file. Here, Docker Compose passes them directly.
 
+# Inject ID into Title of alert
+OPERATOR_ID = os.environ.get("OPERATOR_ID", "UNKNOWN_OP")
+
 # Constants from Environment
 SLACK_WEBHOOK_URL = os.environ.get("SLACK_WEBHOOK_URL")
 # Convert threshold to a float
@@ -33,10 +36,13 @@ LOG_PATTERN = re.compile(
 
 # Slack Alerting Functions
 def send_slack_alert(title, color, text):
-    """Posts a formatted message to Slack."""
+    """Posts a formatted message to Slack, prepending the unique OPERATOR_ID."""
     if not SLACK_WEBHOOK_URL or 'T00000000' in SLACK_WEBHOOK_URL:
         print(f"ALERT SKIPPED (NO WEBHOOK): {title}")
         return
+
+    # Injects the unique ID into the title
+    unique_title = f"[{OPERATOR_ID}] {title}"
 
     payload = {
         "text": f":warning: {title}",
